@@ -39,11 +39,11 @@ export function AdminSidebar() {
     <Sidebar className="border-r border-gray-200">
       <SidebarContent>
         <div className="p-6">
-          <div className="flex items-center mb-2">
+          <div className="flex justify-center items-center mb-2">
             <img 
               src="/lovable-uploads/98dec25d-616a-4afa-94ce-e404b365aa35.png" 
               alt="Young Achievers Logo" 
-              className="h-12"
+              className="h-10"
             />
           </div>
           <p className="text-sm text-gray-500">Admin Dashboard</p>
