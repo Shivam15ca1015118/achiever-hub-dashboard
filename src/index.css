@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -44,10 +43,33 @@
 }
 
 .fade-in {
-  @apply animate-in fade-in duration-500;
+  @apply animate-in duration-500;
+  animation: fadeIn 0.5s ease-out;
 }
 
 .slide-in {
-  @apply animate-in slide-in-from-left duration-500;
+  @apply animate-in duration-500;
+  animation: slideIn 0.5s ease-out;
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
