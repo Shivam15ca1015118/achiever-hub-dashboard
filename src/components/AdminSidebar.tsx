@@ -43,7 +43,7 @@ export function AdminSidebar() {
             <img 
               src="/lovable-uploads/98dec25d-616a-4afa-94ce-e404b365aa35.png" 
               alt="Young Achievers Logo" 
-              className="h-14"
+              className="h-20"
             />
           </div>
           <p className="text-sm text-gray-500">Admin Dashboard</p>
