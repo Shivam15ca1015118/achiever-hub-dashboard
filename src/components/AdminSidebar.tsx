@@ -1,3 +1,4 @@
+
 import {
   Sidebar,
   SidebarContent,
@@ -21,6 +22,7 @@ import {
   User 
 } from "lucide-react";
 import { useState } from "react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export function AdminSidebar() {
   const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
@@ -33,62 +35,77 @@ export function AdminSidebar() {
     <Sidebar className="border-r border-gray-200">
       <SidebarContent>
         <div className="p-6">
-          <div className="flex justify-center items-center mb-2">
+          <div className="flex justify-center items-center mb-4">
             <img 
               src="/lovable-uploads/98dec25d-616a-4afa-94ce-e404b365aa35.png" 
               alt="Young Achievers Logo" 
               className="h-20"
             />
           </div>
-          <p className="text-sm text-gray-500">Admin Dashboard</p>
+          <p className="text-sm text-gray-500 text-center py-2">Admin Dashboard</p>
         </div>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton 
-                  onClick={toggleUserManagement}
-                  className="flex items-center gap-3 justify-between"
+                <Collapsible 
+                  open={isUserManagementOpen} 
+                  onOpenChange={setIsUserManagementOpen}
+                  className="w-full"
                 >
-                  <div className="flex items-center gap-3">
-                    <Users className="h-4 w-4" />
-                    <span>User Management</span>
-                  </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className={`transition-transform ${isUserManagementOpen ? 'rotate-180' : ''}`}
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </SidebarMenuButton>
-                {isUserManagementOpen && (
-                  <SidebarMenuSub>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <a href="/roles" className="flex items-center gap-3">
-                          <Shield className="h-4 w-4" />
-                          <span>Roles & Permissions</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                    <SidebarMenuSubItem>
-                      <SidebarMenuSubButton asChild>
-                        <a href="/logs" className="flex items-center gap-3">
-                          <ClipboardList className="h-4 w-4" />
-                          <span>Action Logs</span>
-                        </a>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  </SidebarMenuSub>
-                )}
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton 
+                      className="flex items-center gap-3 justify-between w-full"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Users className="h-4 w-4" />
+                        <span>User Management</span>
+                      </div>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className={`transition-transform duration-300 ${isUserManagementOpen ? 'rotate-180' : ''}`}
+                      >
+                        <path d="m6 9 6 6 6-6" />
+                      </svg>
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="animate-accordion-down">
+                    <SidebarMenuSub>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <a href="/users" className="flex items-center gap-3">
+                            <User className="h-4 w-4" />
+                            <span>Users</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <a href="/roles" className="flex items-center gap-3">
+                            <Shield className="h-4 w-4" />
+                            <span>Roles & Permissions</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                      <SidebarMenuSubItem>
+                        <SidebarMenuSubButton asChild>
+                          <a href="/logs" className="flex items-center gap-3">
+                            <ClipboardList className="h-4 w-4" />
+                            <span>Action Logs</span>
+                          </a>
+                        </SidebarMenuSubButton>
+                      </SidebarMenuSubItem>
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
+                </Collapsible>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
