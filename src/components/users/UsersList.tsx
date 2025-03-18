@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Card,
@@ -21,7 +20,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -36,7 +34,6 @@ import {
   X
 } from "lucide-react";
 
-// Mock data for user list
 const mockUsers = [
   {
     id: 1,
@@ -131,7 +128,7 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between bg-muted/30">
-        <CardTitle>User List</CardTitle>
+        <CardTitle className="text-center mx-auto">Users</CardTitle>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -146,12 +143,12 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Username</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="w-[200px]">Name</TableHead>
+              <TableHead className="w-[150px]">Username</TableHead>
+              <TableHead className="w-[200px]">Email</TableHead>
+              <TableHead className="w-[120px]">Role</TableHead>
+              <TableHead className="w-[120px]">Status</TableHead>
+              <TableHead className="text-right w-[80px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -164,24 +161,24 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
             ) : (
               filteredUsers.map((user) => (
                 <TableRow key={user.id}>
-                  <TableCell className="font-medium">
+                  <TableCell className="font-medium w-[200px]">
                     {user.firstName} {user.lastName}
                   </TableCell>
-                  <TableCell>{user.username}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>
+                  <TableCell className="w-[150px]">{user.username}</TableCell>
+                  <TableCell className="w-[200px]">{user.email}</TableCell>
+                  <TableCell className="w-[120px]">
                     <Badge variant="outline" className={getRoleBadge(user.role)}>
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="w-[120px]">
                     <Badge variant="outline" className={getStatusBadgeColor(user.status)}>
                       {user.status === "active" && <Check className="h-3 w-3 mr-1" />}
                       {user.status === "inactive" && <X className="h-3 w-3 mr-1" />}
                       {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right w-[80px]">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
@@ -190,7 +187,6 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <DropdownMenuItem onClick={() => onEdit(user)}>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit
