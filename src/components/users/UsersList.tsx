@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Card,
@@ -128,7 +129,7 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between bg-muted/30">
-        <CardTitle className="text-center mx-auto">Users</CardTitle>
+        <CardTitle>User List</CardTitle>
         <div className="relative w-64">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -146,9 +147,9 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
               <TableHead className="w-[200px]">Name</TableHead>
               <TableHead className="w-[150px]">Username</TableHead>
               <TableHead className="w-[200px]">Email</TableHead>
-              <TableHead className="w-[120px]">Role</TableHead>
-              <TableHead className="w-[120px]">Status</TableHead>
-              <TableHead className="text-right w-[80px]">Actions</TableHead>
+              <TableHead className="w-[120px] text-center">Role</TableHead>
+              <TableHead className="w-[120px] text-center">Status</TableHead>
+              <TableHead className="w-[80px] text-center">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -166,19 +167,19 @@ export const UsersList = ({ onEdit }: UsersListProps) => {
                   </TableCell>
                   <TableCell className="w-[150px]">{user.username}</TableCell>
                   <TableCell className="w-[200px]">{user.email}</TableCell>
-                  <TableCell className="w-[120px]">
+                  <TableCell className="w-[120px] text-center">
                     <Badge variant="outline" className={getRoleBadge(user.role)}>
                       {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="w-[120px]">
+                  <TableCell className="w-[120px] text-center">
                     <Badge variant="outline" className={getStatusBadgeColor(user.status)}>
                       {user.status === "active" && <Check className="h-3 w-3 mr-1" />}
                       {user.status === "inactive" && <X className="h-3 w-3 mr-1" />}
                       {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell className="text-right w-[80px]">
+                  <TableCell className="w-[80px] text-center">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
