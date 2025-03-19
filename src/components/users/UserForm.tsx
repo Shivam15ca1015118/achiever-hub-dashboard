@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -133,6 +132,188 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
     }
   };
 
+  const renderPermissions = () => {
+    if (role === "student") {
+      return (
+        <div className="flex items-center justify-center h-32 border rounded-md">
+          <p className="text-muted-foreground">Students do not have any permission access rights.</p>
+        </div>
+      );
+    }
+
+    if (role === "faculty") {
+      return (
+        <div className="border rounded-md p-4 space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <FormField
+              control={form.control}
+              name="permissions.members"
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="cursor-pointer">Member Management</FormLabel>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="permissions.batches"
+              render={({ field }) => (
+                <FormItem className="flex items-center gap-2 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormLabel className="cursor-pointer">Batch Management</FormLabel>
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="border rounded-md p-4 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <FormField
+            control={form.control}
+            name="permissions.users"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">User Management</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.roles"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Roles & Permissions</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.venues"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Venue Management</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.batches"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Batch Management</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.partners"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Partner Management</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.members"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Member Management</FormLabel>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="permissions.billing"
+            render={({ field }) => (
+              <FormItem className="flex items-center gap-2 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+                <FormLabel className="cursor-pointer">Billing Permissions</FormLabel>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const getTabsList = () => {
+    if (role === "admin") {
+      return (
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="userDetails">User Details</TabsTrigger>
+          <TabsTrigger value="roleAccess">Role & Access</TabsTrigger>
+          <TabsTrigger value="accountSettings">Account Settings</TabsTrigger>
+        </TabsList>
+      );
+    }
+    
+    return (
+      <TabsList className="grid w-full grid-cols-4">
+        <TabsTrigger value="userDetails">User Details</TabsTrigger>
+        <TabsTrigger value="roleAccess">Role & Access</TabsTrigger>
+        <TabsTrigger value="additionalInfo">Additional Info</TabsTrigger>
+        <TabsTrigger value="accountSettings">Account Settings</TabsTrigger>
+      </TabsList>
+    );
+  };
+
   return (
     <Card className="bg-white">
       <CardHeader className="flex flex-row items-center justify-between bg-muted/30">
@@ -147,14 +328,8 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <Tabs defaultValue="userDetails" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="userDetails">User Details</TabsTrigger>
-                <TabsTrigger value="roleAccess">Role & Access</TabsTrigger>
-                <TabsTrigger value="additionalInfo">Additional Info</TabsTrigger>
-                <TabsTrigger value="accountSettings">Account Settings</TabsTrigger>
-              </TabsList>
+              {getTabsList()}
 
-              {/* User Details Tab */}
               <TabsContent value="userDetails" className="space-y-6 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
@@ -299,7 +474,6 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
                 </div>
               </TabsContent>
 
-              {/* Role & Access Tab */}
               <TabsContent value="roleAccess" className="space-y-6 py-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <FormField
@@ -405,222 +579,125 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
                   )}
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-sm font-medium">Permissions & Access Levels</h3>
-                  <div className="border rounded-md p-4 space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {role !== "student" && (
+                  <div className="space-y-4">
+                    <h3 className="text-sm font-medium">Permissions & Access Levels</h3>
+                    {renderPermissions()}
+                  </div>
+                )}
+              </TabsContent>
+
+              {role !== "admin" && (
+                <TabsContent value="additionalInfo" className="space-y-6 py-4">
+                  {role === "faculty" && (
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="permissions.users"
+                        name="designation"
                         render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <FormLabel className="cursor-pointer">User Management</FormLabel>
+                          <FormItem>
+                            <FormLabel>Designation</FormLabel>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select designation" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="professor">Professor</SelectItem>
+                                <SelectItem value="assistant_professor">Assistant Professor</SelectItem>
+                                <SelectItem value="lecturer">Lecturer</SelectItem>
+                                <SelectItem value="instructor">Instructor</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
                       <FormField
                         control={form.control}
-                        name="permissions.roles"
+                        name="subjectsAssigned"
                         render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
+                          <FormItem>
+                            <FormLabel>Subjects Assigned</FormLabel>
                             <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
+                              <Textarea
+                                placeholder="Enter subjects assigned, one per line"
+                                {...field}
                               />
                             </FormControl>
-                            <FormLabel className="cursor-pointer">Roles & Permissions</FormLabel>
+                            <FormDescription>
+                              Enter multiple subjects separated by commas or new lines
+                            </FormDescription>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
                       <FormField
                         control={form.control}
-                        name="permissions.venues"
+                        name="joiningDate"
                         render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
+                          <FormItem>
+                            <FormLabel>Joining Date</FormLabel>
                             <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
+                              <Input type="date" {...field} />
                             </FormControl>
-                            <FormLabel className="cursor-pointer">Venue Management</FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="permissions.batches"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <FormLabel className="cursor-pointer">Batch Management</FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="permissions.partners"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <FormLabel className="cursor-pointer">Partner Management</FormLabel>
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="permissions.members"
-                        render={({ field }) => (
-                          <FormItem className="flex items-center gap-2 space-y-0">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <FormLabel className="cursor-pointer">Member Management</FormLabel>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
-                  </div>
-                </div>
-              </TabsContent>
+                  )}
 
-              {/* Additional Info Tab */}
-              <TabsContent value="additionalInfo" className="space-y-6 py-4">
-                {role === "faculty" && (
-                  <div className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="designation"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Designation</FormLabel>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
+                  {role === "student" && (
+                    <div className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Date of Birth</FormLabel>
                             <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select designation" />
-                              </SelectTrigger>
+                              <Input type="date" {...field} />
                             </FormControl>
-                            <SelectContent>
-                              <SelectItem value="professor">Professor</SelectItem>
-                              <SelectItem value="assistant_professor">Assistant Professor</SelectItem>
-                              <SelectItem value="lecturer">Lecturer</SelectItem>
-                              <SelectItem value="instructor">Instructor</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="subjectsAssigned"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Subjects Assigned</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter subjects assigned, one per line"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormDescription>
-                            Enter multiple subjects separated by commas or new lines
-                          </FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="joiningDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Joining Date</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="guardianContact"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Guardian Contact Info</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Guardian phone or email" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="admissionDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Admission Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  )}
+                </TabsContent>
+              )}
 
-                {role === "student" && (
-                  <div className="space-y-6">
-                    <FormField
-                      control={form.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Date of Birth</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="guardianContact"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Guardian Contact Info</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Guardian phone or email" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="admissionDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Admission Date</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                )}
-
-                {role === "admin" && (
-                  <div className="flex items-center justify-center h-32 border rounded-md">
-                    <p className="text-muted-foreground">No additional information required for Admin users.</p>
-                  </div>
-                )}
-              </TabsContent>
-
-              {/* Account Settings Tab */}
               <TabsContent value="accountSettings" className="space-y-6 py-4">
                 <FormField
                   control={form.control}
