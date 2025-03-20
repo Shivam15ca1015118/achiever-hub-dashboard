@@ -17,8 +17,18 @@ import {
   UserCog,
   History
 } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 export function AdminSidebar() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  // Helper function to check if a path is active
+  const isActive = (path: string) => {
+    return currentPath === path;
+  };
+
   return (
     <Sidebar className="border-r border-gray-200">
       <SidebarContent>
@@ -36,7 +46,12 @@ export function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/users") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/users" className="flex items-center gap-3">
                     <Users className="h-4 w-4" />
                     <span>User Management</span>
@@ -45,7 +60,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/venues") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/venues" className="flex items-center gap-3">
                     <MapPin className="h-4 w-4" />
                     <span>Venue Management</span>
@@ -54,7 +74,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/batches") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/batches" className="flex items-center gap-3">
                     <Package className="h-4 w-4" />
                     <span>Batch Management</span>
@@ -63,7 +88,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/partners") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/partners" className="flex items-center gap-3">
                     <Building className="h-4 w-4" />
                     <span>Partner Management</span>
@@ -72,7 +102,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/members") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/members" className="flex items-center gap-3">
                     <User className="h-4 w-4" />
                     <span>Member Management</span>
@@ -81,7 +116,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/activity-logs") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/activity-logs" className="flex items-center gap-3">
                     <History className="h-4 w-4" />
                     <span>Activity Logs</span>
@@ -90,7 +130,12 @@ export function AdminSidebar() {
               </SidebarMenuItem>
 
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                <SidebarMenuButton 
+                  asChild
+                  className={cn(
+                    isActive("/profile") && "bg-secondary text-secondary-foreground font-medium"
+                  )}
+                >
                   <a href="/profile" className="flex items-center gap-3">
                     <UserCog className="h-4 w-4" />
                     <span>Profile</span>
