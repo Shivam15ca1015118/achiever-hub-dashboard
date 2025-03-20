@@ -1,8 +1,9 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { ChartContainer, LineChart } from "@/components/ui/chart";
+import { ChartContainer } from "@/components/ui/chart";
 import { useState } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export function VenueReporting() {
   const [selectedVenue, setSelectedVenue] = useState<string>("all");
@@ -53,6 +54,16 @@ export function VenueReporting() {
     }
   ];
   
+  // Determine which venue data to display
+  const getDataKey = () => {
+    switch(selectedVenue) {
+      case "main": return "Main Campus";
+      case "downtown": return "Downtown Training Center";
+      case "eastWing": return "East Wing Annex";
+      default: return "All Venues";
+    }
+  };
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -80,22 +91,24 @@ export function VenueReporting() {
             <CardDescription>Monthly occupancy percentage</CardDescription>
           </CardHeader>
           <CardContent>
-            <ChartContainer
-              className="aspect-square md:aspect-video"
-            >
-              <LineChart
-                data={occupancyData}
-                index="name"
-                categories={[
-                  selectedVenue === "all" ? "All Venues" :
-                  selectedVenue === "main" ? "Main Campus" :
-                  selectedVenue === "downtown" ? "Downtown Training Center" : "East Wing Annex"
-                ]}
-                colors={["blue"]}
-                yAxisWidth={40}
-                showLegend={false}
-              />
-            </ChartContainer>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={occupancyData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Line 
+                    type="monotone" 
+                    dataKey={getDataKey()}
+                    stroke="#3b82f6" 
+                    strokeWidth={2}
+                    dot={{ r: 4 }}
+                    activeDot={{ r: 6 }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </CardContent>
         </Card>
         
