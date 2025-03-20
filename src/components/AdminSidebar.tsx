@@ -7,9 +7,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { 
   Users, 
@@ -20,16 +17,8 @@ import {
   UserCog,
   History
 } from "lucide-react";
-import { useState } from "react";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 export function AdminSidebar() {
-  const [isUserManagementOpen, setIsUserManagementOpen] = useState(false);
-
-  const toggleUserManagement = () => {
-    setIsUserManagementOpen(!isUserManagementOpen);
-  };
-
   return (
     <Sidebar className="border-r border-gray-200">
       <SidebarContent>
@@ -47,48 +36,12 @@ export function AdminSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <Collapsible 
-                  open={isUserManagementOpen} 
-                  onOpenChange={setIsUserManagementOpen}
-                  className="w-full"
-                >
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuButton 
-                      className="flex items-center gap-3 justify-between w-full"
-                    >
-                      <div className="flex items-center gap-3">
-                        <Users className="h-4 w-4" />
-                        <span>User Management</span>
-                      </div>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        className={`transition-transform duration-300 ${isUserManagementOpen ? 'rotate-180' : ''}`}
-                      >
-                        <path d="m6 9 6 6 6-6" />
-                      </svg>
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent className="animate-accordion-down">
-                    <SidebarMenuSub>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="/users" className="flex items-center gap-3">
-                            <User className="h-4 w-4" />
-                            <span>Users</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </Collapsible>
+                <SidebarMenuButton asChild>
+                  <a href="/users" className="flex items-center gap-3">
+                    <Users className="h-4 w-4" />
+                    <span>User Management</span>
+                  </a>
+                </SidebarMenuButton>
               </SidebarMenuItem>
 
               <SidebarMenuItem>
