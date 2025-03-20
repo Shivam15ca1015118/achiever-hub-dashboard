@@ -13,13 +13,12 @@ import {
 } from "@/components/ui/sidebar";
 import { 
   Users, 
-  Shield, 
-  ClipboardList, 
-  UserCog, 
+  User, 
   MapPin, 
   Package, 
   Building, 
-  User 
+  UserCog,
+  History
 } from "lucide-react";
 import { useState } from "react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -87,22 +86,6 @@ export function AdminSidebar() {
                           </a>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="/roles" className="flex items-center gap-3">
-                            <Shield className="h-4 w-4" />
-                            <span>Roles & Permissions</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                      <SidebarMenuSubItem>
-                        <SidebarMenuSubButton asChild>
-                          <a href="/logs" className="flex items-center gap-3">
-                            <ClipboardList className="h-4 w-4" />
-                            <span>Action Logs</span>
-                          </a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
                     </SidebarMenuSub>
                   </CollapsibleContent>
                 </Collapsible>
@@ -140,6 +123,15 @@ export function AdminSidebar() {
                   <a href="/members" className="flex items-center gap-3">
                     <User className="h-4 w-4" />
                     <span>Member Management</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <a href="/activity-logs" className="flex items-center gap-3">
+                    <History className="h-4 w-4" />
+                    <span>Activity Logs</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
