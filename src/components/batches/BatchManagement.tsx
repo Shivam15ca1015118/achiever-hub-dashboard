@@ -2,11 +2,13 @@
 import { useState } from "react";
 import { BatchForm } from "./BatchForm";
 import { BatchList } from "./BatchList";
+import { BatchSessionModal } from "./BatchSessionModal";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 
 export const BatchManagement = () => {
   const [showForm, setShowForm] = useState(false);
+  const [showSessionModal, setShowSessionModal] = useState(false);
   const [editBatch, setEditBatch] = useState<any>(null);
 
   const handleAddBatch = () => {
@@ -24,10 +26,22 @@ export const BatchManagement = () => {
     setEditBatch(null);
   };
 
+  const handleOpenSessionModal = () => {
+    setShowSessionModal(true);
+  };
+
+  const handleCloseSessionModal = () => {
+    setShowSessionModal(false);
+  };
+
   return (
     <div className="space-y-6">
       {showForm ? (
-        <BatchForm initialData={editBatch} onClose={handleCloseForm} />
+        <BatchForm 
+          initialData={editBatch} 
+          onClose={handleCloseForm} 
+          onOpenSessionModal={handleOpenSessionModal} 
+        />
       ) : (
         <>
           <div className="flex justify-end">
@@ -38,6 +52,11 @@ export const BatchManagement = () => {
           <BatchList onEdit={handleEditBatch} />
         </>
       )}
+
+      <BatchSessionModal
+        open={showSessionModal}
+        onClose={handleCloseSessionModal}
+      />
     </div>
   );
 };

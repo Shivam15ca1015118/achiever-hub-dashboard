@@ -1,6 +1,8 @@
 
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { BatchManagement } from "@/components/batches/BatchManagement";
+import { BatchSessionSchedule } from "@/components/batches/BatchSessionSchedule";
+import { BatchReporting } from "@/components/batches/BatchReporting";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
 
@@ -38,29 +40,5 @@ export default function Batches() {
         </Tabs>
       </div>
     </DashboardLayout>
-  );
-}
-
-// Temporary component until we implement the real one
-function BatchSessionSchedule() {
-  return (
-    <div className="rounded-md border p-8 text-center">
-      <h2 className="text-xl font-semibold">Session Schedule</h2>
-      <p className="text-muted-foreground mt-2">
-        The session schedule functionality will be implemented soon.
-      </p>
-    </div>
-  );
-}
-
-// Temporary component until we implement the real one
-function BatchReporting() {
-  return (
-    <div className="rounded-md border p-8 text-center">
-      <h2 className="text-xl font-semibold">Batch Reporting</h2>
-      <p className="text-muted-foreground mt-2">
-        The batch reporting functionality will be implemented soon.
-      </p>
-    </div>
   );
 }

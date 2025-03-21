@@ -18,13 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { 
-  Sheet, 
-  SheetContent, 
-  SheetDescription, 
-  SheetHeader, 
-  SheetTitle 
-} from "@/components/ui/sheet";
-import { 
   Form, 
   FormControl, 
   FormDescription, 
@@ -33,11 +26,11 @@ import {
   FormLabel, 
   FormMessage 
 } from "@/components/ui/form";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CalendarIcon, Info } from "lucide-react";
+import { CalendarIcon, HelpCircle } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -79,11 +72,10 @@ const mockVenues = [
 type BatchFormProps = {
   initialData?: any;
   onClose: () => void;
+  onOpenSessionModal: () => void;
 };
 
-export const BatchForm = ({ initialData, onClose }: BatchFormProps) => {
-  const [scheduleInfo, setScheduleInfo] = useState(false);
-  
+export const BatchForm = ({ initialData, onClose, onOpenSessionModal }: BatchFormProps) => {
   // Get default values based on whether we're editing or creating
   const defaultValues: Partial<BatchFormValues> = {
     batchName: initialData?.name || "",
@@ -316,9 +308,9 @@ export const BatchForm = ({ initialData, onClose }: BatchFormProps) => {
                   type="button" 
                   variant="ghost" 
                   size="icon"
-                  onClick={() => setScheduleInfo(true)}
+                  onClick={onOpenSessionModal}
                 >
-                  <Info className="h-5 w-5" />
+                  <HelpCircle className="h-5 w-5" />
                 </Button>
               </div>
             </CardHeader>
@@ -402,42 +394,6 @@ export const BatchForm = ({ initialData, onClose }: BatchFormProps) => {
           </CardFooter>
         </form>
       </Form>
-      
-      <Sheet open={scheduleInfo} onOpenChange={setScheduleInfo}>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Session Scheduling</SheetTitle>
-            <SheetDescription>
-              How sessions are scheduled for each batch
-            </SheetDescription>
-          </SheetHeader>
-          <div className="space-y-6 py-6">
-            <div>
-              <h3 className="font-medium">Session Structure</h3>
-              <p className="text-sm text-muted-foreground mt-2">
-                Each batch consists of 8 classes that should follow a Monday & Friday roster.
-              </p>
-            </div>
-            
-            <div>
-              <h3 className="font-medium">Scheduling Rules</h3>
-              <ul className="list-disc list-inside text-sm text-muted-foreground mt-2 space-y-2">
-                <li>Sessions can only be rescheduled but never canceled</li>
-                <li>For subscription batches, sessions recur on selected days</li>
-                <li>For fixed batches, all 8 sessions are scheduled upfront</li>
-                <li>All batches will automatically complete after 8 sessions</li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-medium">Default Schedule</h3>
-              <p className="text-sm text-muted-foreground mt-2">
-                By default, both Monday and Friday are selected for sessions, providing an optimal learning schedule with appropriate intervals. You can adjust this if needed.
-              </p>
-            </div>
-          </div>
-        </SheetContent>
-      </Sheet>
     </div>
   );
 };
