@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ChartContainer } from "@/components/ui/chart";
 import { useState } from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 
 export function VenueReporting() {
   const [selectedVenue, setSelectedVenue] = useState<string>("all");
@@ -51,6 +51,52 @@ export function VenueReporting() {
       "Main Campus": 97,
       "Downtown Training Center": 85,
       "East Wing Annex": 70
+    }
+  ];
+  
+  // Mock data for usage statistics (hours per month)
+  const usageData = [
+    {
+      name: "Jan",
+      "All Venues": 320,
+      "Main Campus": 180,
+      "Downtown Training Center": 90,
+      "East Wing Annex": 50
+    },
+    {
+      name: "Feb",
+      "All Venues": 350,
+      "Main Campus": 200,
+      "Downtown Training Center": 100,
+      "East Wing Annex": 50
+    },
+    {
+      name: "Mar",
+      "All Venues": 380,
+      "Main Campus": 210,
+      "Downtown Training Center": 120,
+      "East Wing Annex": 50
+    },
+    {
+      name: "Apr",
+      "All Venues": 400,
+      "Main Campus": 220,
+      "Downtown Training Center": 130,
+      "East Wing Annex": 50
+    },
+    {
+      name: "May",
+      "All Venues": 420,
+      "Main Campus": 230,
+      "Downtown Training Center": 140,
+      "East Wing Annex": 50
+    },
+    {
+      name: "Jun",
+      "All Venues": 450,
+      "Main Campus": 250,
+      "Downtown Training Center": 150,
+      "East Wing Annex": 50
     }
   ];
   
@@ -117,9 +163,21 @@ export function VenueReporting() {
             <CardTitle>Usage Statistics</CardTitle>
             <CardDescription>Total hours of venue usage per month</CardDescription>
           </CardHeader>
-          <CardContent className="flex items-center justify-center h-[300px]">
-            <div className="text-center text-muted-foreground">
-              Detailed usage statistics will be available soon
+          <CardContent>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={usageData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Bar 
+                    dataKey={getDataKey()} 
+                    fill="#10b981" 
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
