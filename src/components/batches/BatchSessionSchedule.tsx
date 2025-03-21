@@ -1,85 +1,179 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, ListChecks, Clock } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useState } from "react";
+import { Calendar as CalendarIcon, Clock, GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+
+// Mock data for demonstration purposes
+const mockBatches = [
+  {
+    id: "1",
+    name: "Web Development Fundamentals",
+    partner: "Dr. Sarah Johnson",
+    venue: "Main Campus",
+    startDate: new Date("2024-07-15"),
+    endDate: new Date("2024-08-10"),
+    sessionCount: 8,
+    type: "Fixed",
+    mondaySession: true,
+    fridaySession: true,
+    startTime: "09:00",
+    endTime: "11:00"
+  },
+  {
+    id: "2",
+    name: "Data Science Basics",
+    partner: "Prof. Michael Chen",
+    venue: "Innovation Hub",
+    startDate: new Date("2024-07-20"),
+    endDate: new Date("2024-10-20"),
+    sessionCount: 12,
+    type: "Quarterly Subscription",
+    mondaySession: true,
+    fridaySession: false,
+    startTime: "14:00",
+    endTime: "16:00"
+  }
+];
 
 export const BatchSessionSchedule = () => {
-  // Mock data for upcoming sessions
-  const upcomingSessions = [
-    { id: 1, batchName: "JavaScript Fundamentals", date: "May 15, 2023", time: "9:00 AM - 11:00 AM", location: "Main Campus" },
-    { id: 2, batchName: "React Advanced", date: "May 16, 2023", time: "2:00 PM - 4:00 PM", location: "Innovation Hub" },
-    { id: 3, batchName: "UX Design Principles", date: "May 17, 2023", time: "10:00 AM - 12:00 PM", location: "Downtown Training Center" },
-  ];
-
+  const [selectedBatch, setSelectedBatch] = useState(mockBatches[0]);
+  
+  // Generate session schedule based on batch parameters
+  const generateSessionSchedule = (batch: typeof mockBatches[0]) => {
+    const { startDate, sessionCount, mondaySession, fridaySession, startTime, endTime } = batch;
+    
+    const sessions = [];
+    let currentDate = new Date(startDate);
+    let sessionCounter = 0;
+    
+    while (sessionCounter < sessionCount) {
+      const dayOfWeek = currentDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
+      
+      // Check if the current day is a Monday (1) or Friday (5) based on batch configuration
+      if ((mondaySession && dayOfWeek === 1) || (fridaySession && dayOfWeek === 5)) {
+        sessions.push({
+          id: `session-${sessionCounter + 1}`,
+          date: new Date(currentDate),
+          sessionNumber: sessionCounter + 1,
+          startTime,
+          endTime
+        });
+        
+        sessionCounter++;
+      }
+      
+      // Move to the next day
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    
+    return sessions;
+  };
+  
+  const sessions = generateSessionSchedule(selectedBatch);
+  
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="h-5 w-5" />
-            Session Schedule
+            <GraduationCap className="h-5 w-5" />
+            Session Routine Dashboard
           </CardTitle>
           <CardDescription>
-            View and manage upcoming batch sessions
+            View and manage session schedules for each batch
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-semibold">Upcoming Sessions</h2>
-              <Button variant="outline" size="sm">
-                View All
-              </Button>
-            </div>
-            
-            <div className="space-y-4">
-              {upcomingSessions.map(session => (
-                <Card key={session.id}>
-                  <CardContent className="p-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-medium">{session.batchName}</h3>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                          <Calendar className="h-4 w-4" />
-                          <span>{session.date}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                          <Clock className="h-4 w-4" />
-                          <span>{session.time}</span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2">
-                        <Button variant="outline" size="sm">
-                          Reschedule
-                        </Button>
-                        <Button variant="secondary" size="sm">
-                          Details
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+            <div className="flex flex-wrap gap-2">
+              {mockBatches.map(batch => (
+                <Button 
+                  key={batch.id}
+                  variant={selectedBatch.id === batch.id ? "default" : "outline"}
+                  onClick={() => setSelectedBatch(batch)}
+                >
+                  {batch.name}
+                </Button>
               ))}
             </div>
             
-            <div className="rounded-md border p-6 mt-6">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
-                  <ListChecks className="h-5 w-5" />
-                  Session Calendar
-                </h3>
-              </div>
-              <p className="text-muted-foreground mt-2 mb-6">
-                Full calendar view with session details and management options
-              </p>
-              
-              <div className="flex items-center justify-center">
-                <Calendar className="h-24 w-24 text-muted-foreground" />
-              </div>
-              <p className="text-center text-muted-foreground mt-4">
-                The detailed calendar view will be implemented soon.
-              </p>
-            </div>
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">
+                  {selectedBatch.name} - {selectedBatch.type}
+                </CardTitle>
+                <CardDescription>
+                  Faculty: {selectedBatch.partner} | Venue: {selectedBatch.venue}
+                </CardDescription>
+                <div className="flex flex-wrap gap-4 mt-2 text-sm text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <CalendarIcon className="h-4 w-4" />
+                    <span>
+                      {format(selectedBatch.startDate, "MMM d, yyyy")} - {format(selectedBatch.endDate, "MMM d, yyyy")}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="h-4 w-4" />
+                    <span>
+                      {selectedBatch.startTime} - {selectedBatch.endTime}
+                    </span>
+                  </div>
+                  <div>
+                    Session days: {[
+                      selectedBatch.mondaySession ? "Monday" : null, 
+                      selectedBatch.fridaySession ? "Friday" : null
+                    ].filter(Boolean).join(", ")}
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Session #</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Day</TableHead>
+                      <TableHead>Time</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {sessions.map(session => {
+                      const sessionDate = new Date(session.date);
+                      const isCompleted = sessionDate < new Date();
+                      const isToday = format(sessionDate, "yyyy-MM-dd") === format(new Date(), "yyyy-MM-dd");
+                      
+                      return (
+                        <TableRow key={session.id}>
+                          <TableCell className="font-medium">Session {session.sessionNumber}</TableCell>
+                          <TableCell>{format(sessionDate, "MMM d, yyyy")}</TableCell>
+                          <TableCell>{format(sessionDate, "EEEE")}</TableCell>
+                          <TableCell>{session.startTime} - {session.endTime}</TableCell>
+                          <TableCell>
+                            {isCompleted ? (
+                              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                Completed
+                              </span>
+                            ) : isToday ? (
+                              <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
+                                Today
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
+                                Upcoming
+                              </span>
+                            )}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
         </CardContent>
       </Card>

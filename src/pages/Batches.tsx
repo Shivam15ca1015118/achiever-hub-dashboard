@@ -22,7 +22,7 @@ export default function Batches() {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <TabsList>
             <TabsTrigger value="management">Batch Management</TabsTrigger>
-            <TabsTrigger value="sessions">Session Schedule</TabsTrigger>
+            <TabsTrigger value="sessions">Session Routine</TabsTrigger>
             <TabsTrigger value="reporting">Reporting</TabsTrigger>
           </TabsList>
           
