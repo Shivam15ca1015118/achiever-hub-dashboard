@@ -15,7 +15,8 @@ import {
   Package, 
   Building, 
   UserCog,
-  History
+  History,
+  GraduationCap
 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -81,7 +82,7 @@ export function AdminSidebar() {
                   )}
                 >
                   <a href="/batches" className="flex items-center gap-3">
-                    <Package className="h-4 w-4" />
+                    <GraduationCap className="h-4 w-4" />
                     <span>Batch Management</span>
                   </a>
                 </SidebarMenuButton>
