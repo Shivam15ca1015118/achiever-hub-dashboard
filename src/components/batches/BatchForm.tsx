@@ -57,8 +57,6 @@ const formSchema = z.object({
   endTime: z.string().min(1, { message: "End time is required" }),
   guestPartners: z.array(z.string()).optional(),
   maxCapacity: z.number().min(1, { message: "Maximum capacity must be at least 1" }),
-  mondaySession: z.boolean(),
-  fridaySession: z.boolean(),
   notes: z.string().optional()
 });
 
@@ -101,8 +99,6 @@ export const BatchForm = ({ initialData, onClose, onOpenSessionModal }: BatchFor
     endTime: initialData?.endTime || "11:00",
     guestPartners: initialData?.guestPartners || [],
     maxCapacity: initialData?.maxCapacity || 30,
-    mondaySession: initialData?.mondaySession !== undefined ? initialData.mondaySession : true,
-    fridaySession: initialData?.fridaySession !== undefined ? initialData.fridaySession : true,
     notes: initialData?.notes || ""
   };
 
@@ -457,50 +453,6 @@ export const BatchForm = ({ initialData, onClose, onOpenSessionModal }: BatchFor
                           : "Auto-calculated based on subscription type"}
                       </FormDescription>
                       <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="mondaySession"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Monday Sessions</FormLabel>
-                        <FormDescription>
-                          Schedule sessions on Mondays
-                        </FormDescription>
-                      </div>
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="fridaySession"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-row items-center space-x-3 space-y-0">
-                      <FormControl>
-                        <Checkbox
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
-                      </FormControl>
-                      <div className="space-y-1 leading-none">
-                        <FormLabel>Friday Sessions</FormLabel>
-                        <FormDescription>
-                          Schedule sessions on Fridays
-                        </FormDescription>
-                      </div>
                     </FormItem>
                   )}
                 />

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -22,6 +23,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { X, ArrowLeft, Upload, Save, Plus } from "lucide-react";
 
+// Mock venues data
+const mockVenues = [
+  { id: "1", name: "Main Campus" },
+  { id: "2", name: "Downtown Training Center" },
+  { id: "3", name: "East Wing Annex" },
+  { id: "4", name: "Innovation Hub" }
+];
+
 const userSchema = z.object({
   firstName: z.string().min(2, { message: "First name must be at least 2 characters." }),
   lastName: z.string().min(2, { message: "Last name must be at least 2 characters." }),
@@ -34,6 +43,7 @@ const userSchema = z.object({
   department: z.string().optional(),
   enrollmentNumber: z.string().optional(),
   batch: z.string().optional(),
+  venue: z.string().optional(),
   permissions: z.record(z.boolean()).optional(),
   designation: z.string().optional(),
   subjectsAssigned: z.string().optional(),
@@ -72,6 +82,7 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
     department: initialData?.department || "",
     enrollmentNumber: initialData?.enrollmentNumber || "",
     batch: initialData?.batch || "",
+    venue: initialData?.venue || "",
     permissions: initialData?.permissions || {
       users: false,
       roles: false,
@@ -497,6 +508,37 @@ export const UserForm = ({ initialData, onClose }: UserFormProps) => {
                             <SelectItem value="student">Student</SelectItem>
                           </SelectContent>
                         </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="venue"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Assigned Venue</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select venue" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {mockVenues.map(venue => (
+                              <SelectItem key={venue.id} value={venue.name}>
+                                {venue.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Assign this user to a specific venue
+                        </FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
