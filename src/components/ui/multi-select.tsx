@@ -186,31 +186,6 @@ const MultiSelectContent = React.forwardRef<HTMLDivElement, MultiSelectContentPr
 );
 MultiSelectContent.displayName = "MultiSelectContent";
 
-interface MultiSelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
-  value: string;
-}
-
-const MultiSelectItem = ({ value, children, ...props }: MultiSelectItemProps) => {
-  const context = React.useContext(MultiSelectContext);
-  const isSelected = context.selected.includes(value);
-  
-  return (
-    <CommandItem
-      value={value}
-      onSelect={() => context.handleSelect(value)}
-      {...props}
-    >
-      <Check
-        className={cn(
-          "mr-2 h-4 w-4",
-          isSelected ? "opacity-100" : "opacity-0"
-        )}
-      />
-      {children}
-    </CommandItem>
-  );
-};
-
 // Create context for MultiSelect
 interface MultiSelectContextProps {
   selected: string[];
@@ -221,6 +196,30 @@ const MultiSelectContext = React.createContext<MultiSelectContextProps>({
   selected: [],
   handleSelect: () => {},
 });
+
+interface MultiSelectItemProps extends React.HTMLAttributes<HTMLDivElement> {
+  value: string;
+}
+
+const MultiSelectItem = ({ value, children, ...props }: MultiSelectItemProps) => {
+  const context = React.useContext(MultiSelectContext);
+  
+  return (
+    <CommandItem
+      value={value}
+      onSelect={() => context.handleSelect(value)}
+      {...props}
+    >
+      <Check
+        className={cn(
+          "mr-2 h-4 w-4",
+          context.selected.includes(value) ? "opacity-100" : "opacity-0"
+        )}
+      />
+      {children}
+    </CommandItem>
+  );
+};
 
 export {
   MultiSelect,
