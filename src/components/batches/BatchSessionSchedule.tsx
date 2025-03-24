@@ -2,9 +2,14 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useState } from "react";
-import { Calendar as CalendarIcon, Clock, GraduationCap } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, GraduationCap, Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 // Mock data for demonstration purposes
 const mockBatches = [
@@ -17,8 +22,6 @@ const mockBatches = [
     endDate: new Date("2024-08-10"),
     sessionCount: 8,
     type: "Fixed",
-    mondaySession: true,
-    fridaySession: true,
     startTime: "09:00",
     endTime: "11:00"
   },
@@ -31,19 +34,28 @@ const mockBatches = [
     endDate: new Date("2024-10-20"),
     sessionCount: 12,
     type: "Quarterly Subscription",
-    mondaySession: true,
-    fridaySession: false,
     startTime: "14:00",
     endTime: "16:00"
   }
 ];
 
+type Session = {
+  id: string;
+  date: Date;
+  sessionNumber: number;
+  startTime: string;
+  endTime: string;
+};
+
 export const BatchSessionSchedule = () => {
   const [selectedBatch, setSelectedBatch] = useState(mockBatches[0]);
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+  const [isRescheduleOpen, setIsRescheduleOpen] = useState(false);
+  const [isWeekendDialogOpen, setIsWeekendDialogOpen] = useState(false);
   
   // Generate session schedule based on batch parameters
   const generateSessionSchedule = (batch: typeof mockBatches[0]) => {
-    const { startDate, sessionCount, mondaySession, fridaySession, startTime, endTime } = batch;
+    const { startDate, sessionCount, startTime, endTime } = batch;
     
     const sessions = [];
     let currentDate = new Date(startDate);
@@ -52,8 +64,8 @@ export const BatchSessionSchedule = () => {
     while (sessionCounter < sessionCount) {
       const dayOfWeek = currentDate.getDay(); // 0 for Sunday, 1 for Monday, etc.
       
-      // Check if the current day is a Monday (1) or Friday (5) based on batch configuration
-      if ((mondaySession && dayOfWeek === 1) || (fridaySession && dayOfWeek === 5)) {
+      // Only schedule on Monday (1) through Friday (5)
+      if (dayOfWeek >= 1 && dayOfWeek <= 5) {
         sessions.push({
           id: `session-${sessionCounter + 1}`,
           date: new Date(currentDate),
@@ -74,6 +86,17 @@ export const BatchSessionSchedule = () => {
   
   const sessions = generateSessionSchedule(selectedBatch);
   
+  const handleReschedule = (session: Session) => {
+    setSelectedSession(session);
+    setIsRescheduleOpen(true);
+  };
+  
+  const handleSaveReschedule = () => {
+    // In a real application, save the rescheduled session
+    setIsRescheduleOpen(false);
+    setSelectedSession(null);
+  };
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -88,16 +111,25 @@ export const BatchSessionSchedule = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            <div className="flex flex-wrap gap-2">
-              {mockBatches.map(batch => (
-                <Button 
-                  key={batch.id}
-                  variant={selectedBatch.id === batch.id ? "default" : "outline"}
-                  onClick={() => setSelectedBatch(batch)}
-                >
-                  {batch.name}
-                </Button>
-              ))}
+            <div className="w-full max-w-xs">
+              <Select 
+                value={selectedBatch.id} 
+                onValueChange={(value) => {
+                  const batch = mockBatches.find(b => b.id === value);
+                  if (batch) setSelectedBatch(batch);
+                }}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select a batch" />
+                </SelectTrigger>
+                <SelectContent>
+                  {mockBatches.map(batch => (
+                    <SelectItem key={batch.id} value={batch.id}>
+                      {batch.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             
             <Card>
@@ -122,10 +154,7 @@ export const BatchSessionSchedule = () => {
                     </span>
                   </div>
                   <div>
-                    Session days: {[
-                      selectedBatch.mondaySession ? "Monday" : null, 
-                      selectedBatch.fridaySession ? "Friday" : null
-                    ].filter(Boolean).join(", ")}
+                    Session count: {selectedBatch.sessionCount}
                   </div>
                 </div>
               </CardHeader>
@@ -137,7 +166,7 @@ export const BatchSessionSchedule = () => {
                       <TableHead>Date</TableHead>
                       <TableHead>Day</TableHead>
                       <TableHead>Time</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -153,19 +182,16 @@ export const BatchSessionSchedule = () => {
                           <TableCell>{format(sessionDate, "EEEE")}</TableCell>
                           <TableCell>{session.startTime} - {session.endTime}</TableCell>
                           <TableCell>
-                            {isCompleted ? (
-                              <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
-                                Completed
-                              </span>
-                            ) : isToday ? (
-                              <span className="inline-flex items-center rounded-full bg-yellow-100 px-2.5 py-0.5 text-xs font-medium text-yellow-800">
-                                Today
-                              </span>
-                            ) : (
-                              <span className="inline-flex items-center rounded-full bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800">
-                                Upcoming
-                              </span>
-                            )}
+                            <Button 
+                              variant="outline" 
+                              size="sm" 
+                              className="h-8 w-8 p-0"
+                              onClick={() => handleReschedule(session)}
+                              disabled={isCompleted}
+                            >
+                              <Edit className="h-4 w-4" />
+                              <span className="sr-only">Edit session</span>
+                            </Button>
                           </TableCell>
                         </TableRow>
                       );
@@ -177,6 +203,112 @@ export const BatchSessionSchedule = () => {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Reschedule Dialog */}
+      <Dialog open={isRescheduleOpen} onOpenChange={setIsRescheduleOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Reschedule Session</DialogTitle>
+            <DialogDescription>
+              Select a new date and time for this session
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <span className="text-sm font-medium">Session:</span>
+              <span className="col-span-3">{selectedSession ? `Session ${selectedSession.sessionNumber}` : ''}</span>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <span className="text-sm font-medium">Current Date:</span>
+              <span className="col-span-3">
+                {selectedSession ? format(selectedSession.date, "MMM d, yyyy (EEEE)") : ''}
+              </span>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <span className="text-sm font-medium">Current Time:</span>
+              <span className="col-span-3">
+                {selectedSession ? `${selectedSession.startTime} - ${selectedSession.endTime}` : ''}
+              </span>
+            </div>
+            
+            <div className="border-t pt-4">
+              <h4 className="text-sm font-medium mb-2">New Schedule:</h4>
+              <div className="space-y-2">
+                <div>
+                  <label htmlFor="new-date" className="text-sm text-muted-foreground">
+                    New Date (Monday - Friday only)
+                  </label>
+                  <input 
+                    type="date" 
+                    id="new-date"
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    onChange={(e) => {
+                      const date = new Date(e.target.value);
+                      const day = date.getDay();
+                      // Check if weekend (0 = Sunday, 6 = Saturday)
+                      if (day === 0 || day === 6) {
+                        setIsWeekendDialogOpen(true);
+                        e.target.value = ''; // Reset input
+                      }
+                    }}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label htmlFor="new-start-time" className="text-sm text-muted-foreground">
+                      New Start Time
+                    </label>
+                    <input 
+                      type="time" 
+                      id="new-start-time"
+                      defaultValue={selectedSession?.startTime}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="new-end-time" className="text-sm text-muted-foreground">
+                      New End Time
+                    </label>
+                    <input 
+                      type="time" 
+                      id="new-end-time"
+                      defaultValue={selectedSession?.endTime}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsRescheduleOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveReschedule}>
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Weekend Warning Dialog */}
+      <Dialog open={isWeekendDialogOpen} onOpenChange={setIsWeekendDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Invalid Selection</DialogTitle>
+            <DialogDescription>
+              Sessions can only be scheduled between Monday and Friday. Please select a weekday.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button onClick={() => setIsWeekendDialogOpen(false)}>
+              Understand
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
